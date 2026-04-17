@@ -3,8 +3,23 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Pulse — Una conexion real al dia</title>
-  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <title>Pulse — Una conexión real al día</title>
+  <meta name="description" content="Pulse conecta a jóvenes de 13 a 19 años con una persona real al día, elegida por compatibilidad profunda. Sin perfiles públicos, sin likes. Madrid 2026.">
+
+  <!-- Open Graph -->
+  <meta property="og:title"       content="Pulse — Una conexión real al día">
+  <meta property="og:description" content="Una conexión real al día para jóvenes en Madrid. Sin feed, sin likes, sin seguidores. Solo la persona adecuada en el momento adecuado.">
+  <meta property="og:url"         content="https://pulseapp.es">
+  <meta property="og:type"        content="website">
+  <meta property="og:locale"      content="es_ES">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card"        content="summary">
+  <meta name="twitter:title"       content="Pulse — Una conexión real al día">
+  <meta name="twitter:description" content="Una conexión real al día para jóvenes en Madrid. Sin feed, sin likes, sin seguidores.">
+
+  <link rel="canonical" href="https://pulseapp.es">
+
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
 
@@ -75,7 +90,8 @@
     }
 
     input::placeholder { color: #444441; }
-    input:focus { border-color: #7F77DD; }
+    input:focus        { border-color: #7F77DD; }
+    input.input-error  { border-color: #E24B4A; }
 
     button {
       background: #7F77DD;
@@ -89,8 +105,15 @@
       transition: opacity 0.2s;
     }
 
-    button:hover { opacity: 0.9; }
+    button:hover    { opacity: 0.9; }
     button:disabled { opacity: 0.4; cursor: default; }
+
+    .error-msg {
+      color: #E24B4A;
+      font-size: 13px;
+      min-height: 18px;
+      text-align: center;
+    }
 
     .success {
       display: none;
@@ -126,9 +149,9 @@
       padding: 16px;
     }
 
-    .feature-icon { font-size: 20px; margin-bottom: 8px; }
+    .feature-icon  { font-size: 20px; margin-bottom: 8px; }
     .feature-title { font-size: 14px; font-weight: 500; color: #F0F0EE; margin-bottom: 4px; }
-    .feature-text { font-size: 12px; color: #5F5E5A; line-height: 1.5; }
+    .feature-text  { font-size: 12px; color: #5F5E5A; line-height: 1.5; }
 
     .footer {
       margin-top: 48px;
@@ -151,7 +174,7 @@
     <h1>Pulse</h1>
 
     <p class="tagline">
-      <span>Una conexion real al dia.</span><br>
+      <span>Una conexión real al día.</span><br>
       No un feed. No likes. No seguidores.<br>
       Solo la persona adecuada en el momento adecuado.
     </p>
@@ -161,47 +184,50 @@
     </p>
 
     <div class="form" id="form">
-      <input type="email" id="email" placeholder="Tu email" required />
-      <input type="number" id="year" placeholder="Ano de nacimiento (ej: 2007)" min="2005" max="2013" />
-      <button id="btn" onclick="submit()">Quiero ser el primero</button>
+      <input type="email"  id="email" placeholder="Tu email" required />
+      <input type="number" id="year"  placeholder="Año de nacimiento (opcional, ej: 2007)" min="2005" max="2013" />
+      <p class="error-msg" id="error-msg"></p>
+      <button id="btn" onclick="submitWaitlist()">Quiero ser el primero</button>
     </div>
 
     <div class="success" id="success">
-      Estas en la lista. Te avisaremos cuando Pulse llegue a Madrid.<br><br>
-      Mientras tanto, cuentaselo a alguien que lo necesite.
+      Estás en la lista. Te avisaremos cuando Pulse llegue a Madrid.<br><br>
+      Mientras tanto, cuéntaselo a alguien que lo necesite.
     </div>
 
     <div class="features">
       <div class="feature">
         <div class="feature-icon">◆</div>
-        <div class="feature-title">Una conexion al dia</div>
-        <div class="feature-text">Cada dia a las 18:00 conoces a alguien nuevo elegido por compatibilidad real.</div>
+        <div class="feature-title">Una conexión al día</div>
+        <div class="feature-text">Cada día a las 18:00 conoces a alguien nuevo elegido por compatibilidad real.</div>
       </div>
       <div class="feature">
         <div class="feature-icon">⏱</div>
         <div class="feature-title">72 horas</div>
-        <div class="feature-text">La conversacion desaparece si no guardas el contacto. La profundidad se gana.</div>
+        <div class="feature-text">La conversación desaparece si no guardas el contacto. La profundidad se gana.</div>
       </div>
       <div class="feature">
         <div class="feature-icon">🔒</div>
-        <div class="feature-title">Sin perfil publico</div>
+        <div class="feature-title">Sin perfil público</div>
         <div class="feature-text">Nadie ve tu foto ni tu nombre. Solo tu esencia.</div>
       </div>
       <div class="feature">
         <div class="feature-icon">✦</div>
-        <div class="feature-title">Capsula semanal</div>
-        <div class="feature-text">Cada semana, una visualizacion unica de tus conexiones. Compartible.</div>
+        <div class="feature-title">Cápsula semanal</div>
+        <div class="feature-text">Cada semana, una visualización única de tus conexiones. Compartible.</div>
       </div>
     </div>
 
     <div class="footer">
-      <p>Para jovenes de 13 a 19 anos · Madrid 2026</p>
+      <p>Para jóvenes de 13 a 19 años · Madrid 2026</p>
       <p style="margin-top: 8px;">
         <a href="mailto:hola@pulseapp.es">hola@pulseapp.es</a>
       </p>
     </div>
   </div>
 
+  <!-- CDN al final del body para no bloquear el render -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
     const { createClient } = supabase;
     const sb = createClient(
@@ -209,54 +235,100 @@
       'sb_publishable_CG8y4ZhlRKyQSFRqH8Fw4A_kbUAw0xe'
     );
 
-    let count = 47;
+    const EMAIL_RE = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    let count      = 47;
+    let submitting = false;
 
+    // Contador via RPC — no expone emails individuales al cliente
     async function loadCount() {
-      const { count: total } = await sb
-        .from('waitlist')
-        .select('*', { count: 'exact', head: true });
-      if (total) {
-        count = 47 + total;
-        document.getElementById('count').textContent = count;
-      }
+      try {
+        const { data } = await sb.rpc('get_waitlist_count');
+        if (typeof data === 'number') {
+          count = 47 + data;
+          document.getElementById('count').textContent = count;
+        }
+      } catch (_) { /* silencioso si falla — muestra valor por defecto */ }
     }
 
     loadCount();
 
-    async function submit() {
-      const email = document.getElementById('email').value;
-      const year = document.getElementById('year').value;
-      const btn = document.getElementById('btn');
+    function showError(msg) {
+      document.getElementById('error-msg').textContent = msg;
+    }
 
-      if (!email || !email.includes('@')) {
-        alert('Introduce un email valido');
+    function resetBtn() {
+      const btn = document.getElementById('btn');
+      btn.disabled    = false;
+      btn.textContent = 'Quiero ser el primero';
+      submitting      = false;
+    }
+
+    async function submitWaitlist() {
+      // Anti-spam: bloquear si ya hay un envío en curso
+      if (submitting) return;
+
+      const emailInput = document.getElementById('email');
+      const yearInput  = document.getElementById('year');
+      const btn        = document.getElementById('btn');
+      const email      = emailInput.value.trim().toLowerCase();
+      const yearStr    = yearInput.value.trim();
+
+      showError('');
+      emailInput.classList.remove('input-error');
+      yearInput.classList.remove('input-error');
+
+      // Validar email con regex completo
+      if (!EMAIL_RE.test(email)) {
+        showError('Introduce un email válido.');
+        emailInput.classList.add('input-error');
+        emailInput.focus();
         return;
       }
 
-      btn.disabled = true;
+      // Validar año si se ha introducido
+      if (yearStr !== '') {
+        const year = parseInt(yearStr, 10);
+        if (isNaN(year) || year < 2005 || year > 2013) {
+          showError('El año debe estar entre 2005 y 2013 (edad 13–19).');
+          yearInput.classList.add('input-error');
+          yearInput.focus();
+          return;
+        }
+      }
+
+      submitting    = true;
+      btn.disabled  = true;
       btn.textContent = 'Guardando...';
 
-      const { error } = await sb.from('waitlist').insert({
-        email: email,
-        birth_year: year ? parseInt(year) : null,
-        city: 'Madrid',
-      });
+      try {
+        const { error } = await sb.from('waitlist').insert({
+          email,
+          birth_year: yearStr !== '' ? parseInt(yearStr, 10) : null,
+          city: 'Madrid',
+        });
 
-      if (error) {
-        if (error.code === '23505') {
-          alert('Este email ya esta en la lista de espera.');
-        } else {
-          alert('Error al guardar. Intentalo de nuevo.');
+        if (error) {
+          if (error.code === '23505') {
+            showError('Este email ya está en la lista de espera.');
+          } else {
+            showError('Error al guardar. Inténtalo de nuevo.');
+          }
+          // Permitir reintento tras 5 s
+          setTimeout(resetBtn, 5000);
+          return;
         }
-        btn.disabled = false;
-        btn.textContent = 'Quiero ser el primero';
-        return;
-      }
 
-      document.getElementById('form').style.display = 'none';
-      document.getElementById('success').style.display = 'block';
-      count++;
-      document.getElementById('count').textContent = count;
+        // Éxito — ocultar formulario, mostrar confirmación
+        document.getElementById('form').style.display    = 'none';
+        document.getElementById('success').style.display = 'block';
+        count++;
+        document.getElementById('count').textContent = count;
+        // No llamar a resetBtn — previene doble envío en la misma sesión
+
+      } catch (_) {
+        showError('Error de conexión. Inténtalo de nuevo.');
+        setTimeout(resetBtn, 5000);
+      }
     }
   </script>
 </body>
